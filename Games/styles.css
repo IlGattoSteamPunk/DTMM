@@ -1,0 +1,228 @@
+/* Importazione Font */
+@font-face {
+    font-family: 'SPG';
+    src: url(../fonts/SpaceGrotesk-Medium.ttf);
+}
+
+@font-face {
+    font-family: 'SPG-L';
+    src: url(../fonts/SpaceGrotesk-Light.ttf);
+}
+
+:root {
+    --bg-dark: #050505;
+    --glass-bg: rgba(15, 15, 15, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.7);
+    --accent: #ffffff;
+    --radius-lg: 28px;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'SPG', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+#starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Layout Principale */
+.hero-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 50px;
+    width: 100%;
+    max-width: 850px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    text-align: center;
+}
+
+/* Logo e Titoli */
+.logo {
+    width: 140px;
+    margin-bottom: 25px;
+}
+
+.typing {
+    font-size: 2.8rem;
+    margin: 0 auto 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    border-right: 3px solid #fff;
+    animation: typing 2.2s steps(30, end) forwards, blink 0.8s step-end infinite;
+}
+
+.desc-title {
+    font-family: 'SPG-L';
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.support-badge {
+    margin-bottom: 35px;
+}
+
+.support-badge a {
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    padding: 8px 16px;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+.support-badge a:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+/* --- FIX PER GOOGLE SEARCH (Risolve il problema del bianco) --- */
+
+.gsc-control-cse {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* Box di Input */
+.gsc-input-box {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50px !important;
+    height: 48px !important;
+    overflow: hidden;
+}
+
+.gsc-input {
+    color: #fff !important;
+    background: transparent !important;
+    font-family: 'SPG' !important;
+    font-size: 16px !important;
+    padding-left: 15px !important;
+}
+
+/* Pulsante Cerca */
+button.gsc-search-button {
+    background-color: #fff !important;
+    border-radius: 50px !important;
+    border: none !important;
+    height: 38px !important;
+    margin-top: 5px !important;
+    margin-right: 5px !important;
+}
+
+button.gsc-search-button svg {
+    fill: #000 !important;
+}
+
+/* RISULTATI (Qui sistemiamo il contrasto) */
+.gsc-results-wrapper-visible {
+    background: transparent !important;
+    text-align: left;
+}
+
+.gsc-webResult.gsc-result {
+    background-color: rgba(255,255,255,0.03) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    margin-top: 10px !important;
+    padding: 15px !important;
+    border-radius: 12px !important;
+}
+
+/* Titoli dei risultati */
+.gs-title, .gs-title b {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 18px !important;
+}
+
+.gs-title:hover {
+    text-decoration: underline !important;
+}
+
+/* Snippet (Descrizione) - Forza visibilità */
+.gs-snippet {
+    color: rgba(255, 255, 255, 0.6) !important;
+    display: block !important;
+    font-family: 'SPG-L' !important;
+    margin-top: 5px !important;
+}
+
+/* URL sopra il titolo */
+.gsc-url-top, .gs-visibleUrl {
+    color: #70a1ff !important;
+}
+
+/* Note a pié di pagina */
+.notes {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.note-item {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    background: rgba(255,255,255,0.03);
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.note-item a {
+    color: #fff;
+}
+
+/* Animazioni */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .glass-panel { padding: 30px 20px; }
+    .typing { font-size: 1.8rem; }
+}

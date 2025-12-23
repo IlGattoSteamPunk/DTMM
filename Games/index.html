@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search for games confidently with Virgil Game Search">
+    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+    <script async src="https://cse.google.com/cse.js?cx=YOUR_SEARCH_ENGINE_ID"></script>
+    <script src="../search.js"></script>
+    <title>Don't Touch My Money: Tool</title>
+    <style>
+        /* Importazione Font */
+        @font-face {
+            font-family: 'SPG';
+            src: url(../fonts/SpaceGrotesk-Medium.ttf);
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'SPG-L';
+            src: url(../fonts/SpaceGrotesk-Light.ttf);
+            font-display: swap;
+        }
+
+        :root {
+            --bg-dark: #050505;
+            --glass-bg: rgba(15, 15, 15, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.75);
+            --accent: #ffffff;
+            --accent-gold: #ffd700;
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'SPG', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Layout Principale */
+        .hero-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: clamp(30px, 5vw, 50px);
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        /* Logo e Titoli */
+        .title-section {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo {
+            width: clamp(100px, 15vw, 140px);
+            height: auto;
+            margin-bottom: 30px;
+            transition: var(--transition);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+        }
+
+        .typing {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            margin: 0 auto 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            border-right: 3px solid var(--accent-gold);
+            animation: typing 2.2s steps(30, end) forwards, blink 0.8s step-end infinite;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .desc-title {
+            font-family: 'SPG-L';
+            color: var(--text-dim);
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        /* Search Wrapper */
+        .search-wrapper {
+            margin: 40px 0;
+            position: relative;
+            min-height: 60px;
+        }
+
+        /* COMPLETE GOOGLE CSE FIXES - NO WHITE BACKGROUND */
+        .gsc-control-cse {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            font-family: 'SPG', sans-serif !important;
+        }
+
+        /* Remove ALL white backgrounds from search results */
+        .gsc-results-wrapper-overlay,
+        .gsc-results-wrapper-visible,
+        .gsc-wrapper,
+        .gsc-webResult,
+        .gsc-result,
+        .gsc-expansionArea,
+        .gsc-cursor-box,
+        table.gsc-search-box {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Fix the entire results container */
+        .gsc-tabsArea,
+        .gsc-refinementBlock,
+        .gsc-refinementBlock.gsc-inline-block {
+            background: transparent !important;
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+
+        /* Search Box Container */
+        .gsc-input-box {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            border-radius: var(--radius-md) !important;
+            height: 56px !important;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: var(--transition) !important;
+        }
+
+        .gsc-input-box:focus-within {
+            border-color: rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Search Input */
+        input.gsc-input {
+            color: var(--text-main) !important;
+            background: transparent !important;
+            font-family: 'SPG' !important;
+            font-size: 16px !important;
+            padding: 0 20px !important;
+            height: 100% !important;
+            border: none !important;
+            width: calc(100% - 60px) !important;
+        }
+
+        .gsc-input::placeholder {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        /* Search Button */
+        .gsc-search-button-v2,
+        button.gsc-search-button {
+            background-color: var(--text-main) !important;
+            border-radius: var(--radius-sm) !important;
+            border: none !important;
+            height: 44px !important;
+            width: 44px !important;
+            margin: 6px !important;
+            transition: var(--transition) !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+        }
+
+        .gsc-search-button-v2:hover,
+        button.gsc-search-button:hover {
+            background-color: var(--accent-gold) !important;
+            transform: scale(1.05);
+        }
+
+        .gsc-search-button-v2 svg,
+        button.gsc-search-button svg {
+            fill: var(--bg-dark) !important;
+        }
+
+        /* COMPLETE RESULTS FIX - NO WHITE BACKGROUND */
+        .gsc-results-wrapper-visible {
+            background: transparent !important;
+            border: none !important;
+            text-align: left !important;
+            margin-top: 20px !important;
+        }
+
+        /* Individual Results */
+        .gsc-webResult.gsc-result {
+            background-color: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            margin-top: 12px !important;
+            padding: 20px !important;
+            border-radius: var(--radius-sm) !important;
+            transition: var(--transition) !important;
+        }
+
+        .gsc-webResult.gsc-result:hover {
+            background-color: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.15) !important;
+            transform: translateX(4px);
+        }
+
+        /* Result Titles */
+        .gs-title,
+        .gs-title b,
+        .gs-title * {
+            color: var(--text-main) !important;
+            text-decoration: none !important;
+            font-size: 18px !important;
+            font-family: 'SPG' !important;
+            line-height: 1.4 !important;
+            background: transparent !important;
+        }
+
+        .gs-title:hover,
+        .gs-title:hover b {
+            color: var(--accent-gold) !important;
+            text-decoration: underline !important;
+            text-decoration-thickness: 2px !important;
+        }
+
+        /* Snippet */
+        .gs-snippet,
+        .gs-snippet * {
+            color: rgba(255, 255, 255, 0.7) !important;
+            display: block !important;
+            font-family: 'SPG-L' !important;
+            margin-top: 8px !important;
+            line-height: 1.5 !important;
+            font-size: 15px !important;
+            background: transparent !important;
+        }
+
+        /* URL */
+        .gsc-url-top,
+        .gs-visibleUrl,
+        .gs-visibleUrl * {
+            color: #70a1ff !important;
+            font-family: 'SPG-L' !important;
+            font-size: 14px !important;
+            margin-bottom: 5px !important;
+            display: block !important;
+            background: transparent !important;
+        }
+
+        /* Pagination - Fix white background */
+        .gsc-cursor-box {
+            background: transparent !important;
+            border: none !important;
+            margin-top: 30px !important;
+        }
+
+        .gsc-cursor {
+            background: transparent !important;
+        }
+
+        .gsc-cursor-page {
+            color: var(--text-dim) !important;
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            border-radius: 6px !important;
+            padding: 8px 16px !important;
+            margin: 0 4px !important;
+            transition: var(--transition) !important;
+        }
+
+        .gsc-cursor-page:hover,
+        .gsc-cursor-current-page {
+            color: var(--text-main) !important;
+            background: rgba(255,255,255,0.1) !important;
+            border-color: var(--accent-gold) !important;
+        }
+
+        /* Remove ALL table backgrounds */
+        table.gsc-search-box,
+        table.gsc-search-box td,
+        table.gsc-search-box tr {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Fix for the search results table */
+        .gsc-resultsbox-visible,
+        .gsc-results {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Fix for the "X results" text */
+        .gsc-result-info,
+        .gsc-result-info * {
+            color: var(--text-dim) !important;
+            background: transparent !important;
+            font-family: 'SPG-L' !important;
+            padding: 10px 0 !important;
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        }
+
+        /* Notes Section */
+        .notes {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .note-item {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            background: rgba(255,255,255,0.05);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            text-align: left;
+            border-left: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .note-item.warning {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .note-item.info {
+            border-left-color: #4dabf7;
+            background: rgba(77, 171, 247, 0.05);
+        }
+
+        .note-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-2px);
+        }
+
+        .note-item strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .note-item a {
+            color: #70a1ff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(112, 161, 255, 0.3);
+            transition: var(--transition);
+        }
+
+        .note-item a:hover {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        /* Animations */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loading State */
+        .search-loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-dim);
+            font-family: 'SPG-L';
+            font-size: 0.9rem;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 15px;
+                align-items: flex-start;
+                padding-top: 40px;
+            }
+
+            .glass-panel {
+                padding: 25px 20px;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+            }
+
+            .typing {
+                white-space: normal;
+                overflow: visible;
+                border-right: none;
+                animation: fadeIn 1s ease forwards;
+                font-size: 2rem;
+            }
+
+            .gsc-input-box {
+                height: 52px !important;
+            }
+
+            .gsc-input {
+                font-size: 15px !important;
+                padding: 0 15px !important;
+            }
+
+            .gsc-webResult.gsc-result {
+                padding: 15px !important;
+            }
+
+            .gs-title, .gs-title b {
+                font-size: 16px !important;
+            }
+
+            .gs-snippet {
+                font-size: 14px !important;
+            }
+
+            .note-item {
+                padding: 14px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                width: 80px;
+                margin-bottom: 20px;
+            }
+
+            .typing {
+                font-size: 1.6rem;
+            }
+
+            .desc-title {
+                font-size: 0.95rem;
+                margin-bottom: 25px;
+            }
+
+            .search-wrapper {
+                margin: 30px 0;
+            }
+
+            .gsc-input-box {
+                height: 48px !important;
+            }
+
+            button.gsc-search-button {
+                height: 40px !important;
+                width: 40px !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .glass-panel {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                background: white;
+                color: black;
+            }
+
+            .notes {
+                display: none;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .typing {
+                animation: none;
+                width: 100%;
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <!-- Overlay per migliorare la leggibilità del testo sullo sfondo stellato -->
+    <div class="background-overlay"></div>
+
+    <main class="hero-container">
+        <div class="glass-panel">
+            <div class="title-section">
+                <img src="../images/logo.png" alt="Don't Touch My Money: Search" class="logo">
+                <h1 class="typing">Don't Touch My Money: Search</h1>
+                <h2 class="desc-title">Search For Games Not For Your Pockets.</h2>
+            </div>
+
+            <!-- Contenitore per la ricerca di Google -->
+            <div class="search-wrapper">
+                <div class="search-loading"></div>
+                <div class="gcse-search"></div>
+            </div>
+
+            <div class="notes">
+                <div class="note-item warning">
+                    <span>🛡️ <strong>Recommendation:</strong> We strongly recommend using <a href="https://github.com/gorhill/uBlock" target="_blank" rel="noopener noreferrer">uBlock Origin</a> for a safer browsing experience.</span>
+                </div>
+                <div class="note-item info">
+                    <span>ℹ️ If a search result leads to a website's homepage, use that site's internal search function for better results.</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../star-background.js"></script>
+    <script>
+        // Enhanced loading state for search
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchWrapper = document.querySelector('.search-wrapper');
+            const loadingElement = document.createElement('div');
+            loadingElement.className = 'search-loading';
+            loadingElement.textContent = 'Loading search';
+            searchWrapper.appendChild(loadingElement);
+            
+            // Initialize Google CSE
+            if (typeof google !== 'undefined') {
+                google.search.cse.element.render({
+                    div: "search",
+                    tag: 'search'
+                });
+            }
+            
+            // Check if Google CSE is loaded
+            const checkCSE = setInterval(() => {
+                const searchInput = document.querySelector('.gsc-input');
+                if (searchInput) {
+                    loadingElement.style.display = 'none';
+                    clearInterval(checkCSE);
+                    
+                    // Apply additional fixes after load
+                    setTimeout(fixGoogleSearchStyling, 100);
+                }
+            }, 100);
+            
+            // Clear interval after 5 seconds (fallback)
+            setTimeout(() => {
+                clearInterval(checkCSE);
+                loadingElement.style.display = 'none';
+            }, 5000);
+            
+            // Add focus effect to search input
+            document.addEventListener('focusin', function(e) {
+                if (e.target.classList.contains('gsc-input')) {
+                    const inputBox = e.target.closest('.gsc-input-box');
+                    if (inputBox) {
+                        inputBox.style.boxShadow = '0 0 0 2px rgba(255, 215, 0, 0.2)';
+                    }
+                }
+            });
+            
+            document.addEventListener('focusout', function(e) {
+                if (e.target.classList.contains('gsc-input')) {
+                    const inputBox = e.target.closest('.gsc-input-box');
+                    if (inputBox) {
+                        inputBox.style.boxShadow = '';
+                    }
+                }
+            });
+        });
+        
+        // Function to fix Google Search styling
+        function fixGoogleSearchStyling() {
+            // Force remove any white backgrounds
+            const allElements = document.querySelectorAll('*');
+            allElements.forEach(el => {
+                const bgColor = window.getComputedStyle(el).backgroundColor;
+                if (bgColor.includes('255, 255, 255') || bgColor === 'rgb(255, 255, 255)') {
+                    el.style.backgroundColor = 'transparent !important';
+                }
+            });
+            
+            // Additional specific fixes
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                table.style.backgroundColor = 'transparent';
+                table.style.border = 'none';
+            });
+            
+            const tds = document.querySelectorAll('td');
+            tds.forEach(td => {
+                td.style.backgroundColor = 'transparent';
+                td.style.border = 'none';
+            });
+        }
+        
+        // Handle responsive adjustments
+        function handleResponsive() {
+            const isMobile = window.innerWidth <= 768;
+            const glassPanel = document.querySelector('.glass-panel');
+            
+            if (isMobile) {
+                glassPanel.style.padding = '25px 15px';
+            } else {
+                glassPanel.style.padding = 'clamp(30px, 5vw, 50px)';
+            }
+        }
+        
+        // Initial call
+        handleResponsive();
+        
+        // Listen for resize
+        window.addEventListener('resize', handleResponsive);
+    </script>
+
+</body>
+</html>
